@@ -10,7 +10,7 @@
       "node_modules",
       "**/*.spec.ts",
       "**/*.test.ts",
-      "src/router.ts",
+      "src/*.ts",
       "src/client"
   ],
   "include": [

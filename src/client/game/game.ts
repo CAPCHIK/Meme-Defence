@@ -1,8 +1,9 @@
 import * as BABYLON from 'babylonjs';
 import 'babylonjs-inspector';
 import { Client, Room, DataChange } from 'colyseus.js';
-import { MovesRoomState, Player } from '../shared/MovesRoomState';
+import { MovesRoomState, Player } from '../../shared/MovesRoomState';
 import { Mesh, Engine, Scene, MeshBuilder } from 'babylonjs';
+import { Configuration } from '../Configuration';
 
 export class Game {
   private _canvas: HTMLCanvasElement;
@@ -43,9 +44,7 @@ export class Game {
       { width: 7, height: 7, subdivisions: 1 },
       this._scene
     );
-
-
-    this._client = new Client('ws://localhost:2657');
+    this._client = new Client(Configuration.serverUrl);
     this._room = this._client.join('movesRoom');
 
     this._room.listen('players/:id', (change: DataChange) => {

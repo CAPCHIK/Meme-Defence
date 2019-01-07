@@ -117,7 +117,7 @@ export class Game {
       targetSphere.position.copyFrom(pickResult.pickedPoint);
     }
   }
-  private  deletePlayer(id: string): void{
+  private deletePlayer(id: string): void {
     console.log(`deletinf player ${id}`);
     const targetSphere = this._spheres.get(id);
     if (!targetSphere) { return; }

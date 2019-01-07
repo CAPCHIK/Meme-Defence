@@ -10,7 +10,10 @@ const app = express();
 
 // Attach WebSocket Server on HTTP Server.
 const gameServer = new Server({
-  server: createServer(app)
+  server: createServer(app),
+  verifyClient: (info, next) => {
+    next(true)  // will accept the websocket handshake
+  }
 });
 
 

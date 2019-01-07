@@ -7,7 +7,7 @@
     "build": "vue-cli-service build",
     "lint": "vue-cli-service lint",
     "dev-server": "ts-node -P server.tsconfig.json ./src/server/index.ts",
-    "nodemon-server": "nodemon",
+    "nodemon-server": "nodemon --inspect",
     "build-server": "tsc -p server.tsconfig.json && webpack"
   },
   "dependencies": {

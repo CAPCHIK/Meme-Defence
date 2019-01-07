@@ -1,15 +1,28 @@
 import * as BABYLON from 'babylonjs';
-
 import 'babylonjs-inspector';
+import { Client } from 'colyseus.js';
+import { MovesRoomState } from '../shared/MovesRoomState';
 
 export class Game {
   private _canvas: HTMLCanvasElement;
   private _engine: BABYLON.Engine;
   private _scene!: BABYLON.Scene;
 
+  private _client: Client;
+
   constructor(canvas: HTMLCanvasElement) {
     this._canvas = canvas;
     this._engine = new BABYLON.Engine(this._canvas, true);
+    this._client = new Client('ws://localhost:2657');
+    const room = this._client.join('movesRoom');
+    room.onStateChange.addOnce((state: MovesRoomState) => {
+      console.log('this is the first room state!', state);
+    });
+
+    room.onStateChange.add( (state: any) => {
+      console.log('the room state has been updated:', state);
+      console.log('iterator: ', state.incrementer);
+    });
   }
 
   public init() {

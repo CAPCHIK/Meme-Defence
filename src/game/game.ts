@@ -43,11 +43,10 @@ export class Game {
       { width: 7, height: 7, subdivisions: 1 },
       this._scene
     );
+
+
     this._client = new Client('ws://localhost:2657');
     this._room = this._client.join('movesRoom');
-    this._room.onStateChange.addOnce((state: MovesRoomState) => {
-      console.log('this is the first room state!', state);
-    });
 
     this._room.listen('players/:id', (change: DataChange) => {
       if (change.operation === 'add') {
@@ -59,11 +58,7 @@ export class Game {
       } else if (change.operation === 'remove') {
         console.log('player has been removed from the state');
         console.log('player id:', change.path.id);
-        const targetSphere = this._spheres.get(change.path.id);
-        if (!targetSphere) { return; }
-        if (targetSphere.material) { targetSphere.material.dispose(); }
-        targetSphere.dispose();
-        this._spheres.delete(change.path.id);
+        this.deletePlayer(change.path.id);
       }
     });
     this._room.listen('players/:id/point/:attribute', (change: DataChange) => {
@@ -84,9 +79,6 @@ export class Game {
           break;
       }
     });
-    this._room.listen((change: DataChange) => {
-      console.log(change.path, change.operation, change.value);
-    })
   }
 
   public run() {
@@ -108,7 +100,6 @@ export class Game {
       segments: 10
     }, this._scene);
     mesh.position.copyFrom(player.point);
-    console.log(`init color: ${JSON.stringify(player.color)}`);
     const material = new BABYLON.StandardMaterial(`material for ${name}`, this._scene);
     material.diffuseColor = new BABYLON.Color3(player.color.r, player.color.g, player.color.b);
     mesh.material = material;
@@ -120,8 +111,19 @@ export class Game {
     if (!pickResult || !pickResult.hit || !pickResult.pickedPoint) {
       return;
     }
-    if (this._room) {
+    if (this._room && this._room.hasJoined) {
       this._room.send(pickResult.pickedPoint);
+      const targetSphere = this._spheres.get(this._room.sessionId);
+      if (!targetSphere) { return; }
+      targetSphere.position.copyFrom(pickResult.pickedPoint);
     }
+  }
+  private  deletePlayer(id: string): void{
+    console.log(`deletinf player ${id}`);
+    const targetSphere = this._spheres.get(id);
+    if (!targetSphere) { return; }
+    if (targetSphere.material) { targetSphere.material.dispose(); }
+    targetSphere.dispose();
+    this._spheres.delete(id);
   }
 }

@@ -18,7 +18,6 @@ export class MovesRoom extends Room<MovesRoomState> {
     }
 
     public onMessage(client: Client, data: Vector3): void {
-        console.log(`client ${client.sessionId}:${client.sessionId} sended ${JSON.stringify(data)}`);
         this.state.players[client.sessionId].point.copyFrom(data);
     }
 
@@ -27,4 +26,7 @@ export class MovesRoom extends Room<MovesRoomState> {
         delete this.state.players[client.sessionId];
     }
 
+    public onDispose(): void {
+        console.log(`disposing room ${this.roomId}`);
+    }
 }

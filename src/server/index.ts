@@ -12,7 +12,8 @@ const app = express();
 const gameServer = new Server({
   server: createServer(app),
   verifyClient: (info, next) => {
-    next(true)  // will accept the websocket handshake
+    console.log(JSON.stringify(info.req.url));
+    next(true);
   }
 });
 

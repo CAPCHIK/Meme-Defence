@@ -7,7 +7,7 @@
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator';
 
-import { Game } from '@/game/game.ts';
+import { Game } from '@/client/game/game.ts';
 
 @Component
 export default class GamePage extends Vue {

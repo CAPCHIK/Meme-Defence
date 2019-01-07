@@ -1,6 +1,7 @@
 {
-    "ignore": ["**/*.test.ts", "**/*.spec.ts", ".git", "node_modules", "src/client"],
+    "ignore": ["**/*.test.ts", "**/*.spec.ts", ".git", "node_modules", "src/client", "src/game"],
     "watch": ["src"],
     "exec": "npm run dev-server",
-    "ext": "ts"
+    "ext": "ts",
+    "delay":"2500"
 }

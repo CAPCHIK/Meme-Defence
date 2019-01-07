@@ -1,23 +1,30 @@
 import { Room, Client } from 'colyseus';
-import { MovesRoomState, Point } from '../../../shared/MovesRoomState';
+import { MovesRoomState, Player } from '../../../shared/MovesRoomState';
+import { Color3, Vector3 } from 'babylonjs';
 
 export class MovesRoom extends Room<MovesRoomState> {
 
     public onJoin(client: Client): void {
-        this.state.points[client.id] = new Point(0, 0);
+        console.log(`joined ${client.sessionId}`);
+        this.state.players[client.sessionId] = new Player(
+            new Vector3(0, 0, 0),
+            Color3.Random());
     }
 
     public onInit(options: any) {
         this.maxClients = 10;
         this.setState(new MovesRoomState());
         console.log(`on init room ${this.roomId}`);
-        this.clock.setInterval(() => {
-            this.state.incrementer++;
-        }, 500);
     }
 
-    public onMessage(client: Client, data: any): void {
-        // console.log(`client ${client.id}:${client.sessionId} sended ${data}`);
+    public onMessage(client: Client, data: Vector3): void {
+        console.log(`client ${client.sessionId}:${client.sessionId} sended ${JSON.stringify(data)}`);
+        this.state.players[client.sessionId].point.copyFrom(data);
+    }
+
+    public onLeave(client: Client, consented?: boolean): void {
+        console.log(`client ${client.sessionId} leaved from room ${this.roomId}`);
+        delete this.state.players[client.sessionId];
     }
 
 }

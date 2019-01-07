@@ -1,13 +1,12 @@
 import { EntityMap } from 'colyseus';
+import { Vector3, Color3 } from 'babylonjs';
 
 export class MovesRoomState {
-    public incrementer: number = 0;
-    public points: EntityMap<Point> = {};
+    public players: EntityMap<Player> = {};
 }
 
-export class Point {
+export class Player {
     constructor(
-        public x: number,
-        public y: number,
-    ) { }
+        public point: Vector3,
+        public color: Color3) { }
 }

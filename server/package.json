@@ -2,7 +2,11 @@
   "name": "server",
   "version": "1.0.0",
   "description": "",
-  "main": "webpack.config.js",
+  "scripts": {
+    "build": "webpack",
+    "watch": "webpack --watch",
+    "dev": "concurrently --kill-others \"npm run watch\" \"cd ./build && nodemon server\""
+  },
   "dependencies": {
     "webpack-cli": "^3.2.1",
     "@colyseus/monitor": "^0.1.10",
@@ -20,11 +24,6 @@
     "typescript": "^3.0.3",
     "webpack": "^4.28.3",
     "webpack-cli": "^3.2.1"
-  },
-  "scripts": {
-    "build": "webpack",
-    "watch": "webpack --watch",
-    "dev": "concurrently --kill-others \"npm run watch\" \"cd ./build && nodemon server\""
   },
   "author": "",
   "license": "ISC"

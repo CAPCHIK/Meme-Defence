@@ -7,23 +7,8 @@
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator';
 
-import { Game } from '@/client/game/game.ts';
-
 @Component
-export default class GamePage extends Vue {
-  private game?: Game;
-
-  public mounted() {
-    const canvas = this.$refs.canvas as HTMLCanvasElement;
-
-    if (canvas != null) {
-      this.game = new Game(canvas);
-
-      this.game.init();
-      this.game.run();
-    }
-  }
-}
+export default class GamePage extends Vue {}
 </script>
 
 <style lang="scss">

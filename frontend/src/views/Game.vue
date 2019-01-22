@@ -1,27 +1,16 @@
 <template>
   <div class="game-page">
-    <canvas id="game-canvas" ref="canvas"/>
+    <iframe id="game-frame" :src="clientUrl" frameborder="0"></iframe>
   </div>
 </template>
 
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator';
 
-import { Game } from '@/client/game/game.ts';
-
 @Component
 export default class GamePage extends Vue {
-  private game?: Game;
-
-  public mounted() {
-    const canvas = this.$refs.canvas as HTMLCanvasElement;
-
-    if (canvas != null) {
-      this.game = new Game(canvas);
-
-      this.game.init();
-      this.game.run();
-    }
+  public get clientUrl(): string {
+    return process.env.VUE_APP_CLIENT_URL;
   }
 }
 </script>
@@ -31,7 +20,7 @@ export default class GamePage extends Vue {
   height: 100%;
   overflow: hidden;
 
-  #game-canvas {
+  #game-frame {
     width: 100%;
     height: 100%;
     touch-action: none;

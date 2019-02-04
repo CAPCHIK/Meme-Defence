@@ -1,8 +1,8 @@
 import * as BABYLON from "babylonjs";
 import "babylonjs-inspector";
 import { Client, Room, DataChange } from "colyseus.js";
-import { MovesRoomState, Player } from "MovesRoomState";
-import { Mesh, Engine, Scene, MeshBuilder } from "babylonjs";
+import { MovesRoomState, Player } from "src/MovesRoomState";
+import { Mesh, Engine, Scene, MeshBuilder, AbstractMesh } from "babylonjs";
 import { Configuration } from "../Configuration";
 
 export class Game {
@@ -42,6 +42,8 @@ export class Game {
       { width: 7, height: 7, subdivisions: 1 },
       this._scene
     );
+
+
     this._client = new Client(Configuration.serverUrl);
     this._room = this._client.join("movesRoom");
 
@@ -90,7 +92,7 @@ export class Game {
       this._engine.resize();
     });
 
-    this._scene.debugLayer.show();
+    // this._scene.debugLayer.show();
   }
 
   private createSphere(name: string, player: Player): Mesh {
@@ -145,5 +147,42 @@ export class Game {
     }
     targetSphere.dispose();
     this._spheres.delete(id);
+  }
+
+  makePhysicsObject(newMeshes: AbstractMesh[], scene: Scene, scaling: number) {
+    // Create physics root and position it to be the center of mass for the imported mesh
+    var physicsRoot = new BABYLON.Mesh("physicsRoot", scene);
+    physicsRoot.position.y -= 0.9;
+
+    // For all children labeled box (representing colliders), make them invisible and add them as a child of the root object
+    newMeshes.forEach((m, i) => {
+      if (m.name.indexOf("box") != -1) {
+        m.isVisible = false
+        physicsRoot.addChild(m)
+      }
+    })
+
+    // Add all root nodes within the loaded gltf to the physics root
+    newMeshes.forEach((m, i) => {
+      if (m.parent == null) {
+        physicsRoot.addChild(m)
+      }
+    })
+
+    // Make every collider into a physics impostor
+    physicsRoot.getChildMeshes().forEach((m) => {
+      if (m.name.indexOf("box") != -1) {
+        m.scaling.x = Math.abs(m.scaling.x)
+        m.scaling.y = Math.abs(m.scaling.y)
+        m.scaling.z = Math.abs(m.scaling.z)
+        m.physicsImpostor = new BABYLON.PhysicsImpostor(m, BABYLON.PhysicsImpostor.BoxImpostor, { mass: 0.1 }, scene);
+      }
+    })
+
+    // Scale the root object and turn it into a physics impsotor
+    physicsRoot.scaling.scaleInPlace(scaling)
+    physicsRoot.physicsImpostor = new BABYLON.PhysicsImpostor(physicsRoot, BABYLON.PhysicsImpostor.NoImpostor, { mass: 3 }, scene);
+
+    return physicsRoot
   }
 }

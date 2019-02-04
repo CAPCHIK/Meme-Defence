@@ -11,9 +11,10 @@ module.exports = {
   },
   resolve: {
     extensions: ['.webpack.js', '.web.js', '.ts', '.tsx', '.js'],
-    modules: ['node_modules', '../shared'],
+    modules: ['node_modules', '../shared/src'],
     alias: {
-      hiredis: path.join(__dirname, 'aliases/hiredis.js')
+      hiredis: path.join(__dirname, 'aliases/hiredis.js'),
+      '@shared': path.join(__dirname, '../shared/src')
     }
   },
   module: {

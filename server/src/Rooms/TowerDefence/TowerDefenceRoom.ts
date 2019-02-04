@@ -3,10 +3,9 @@ import { MovesRoomState, Player } from '@shared/MovesRoomState';
 import { MyScene } from '@shared/scenes/MyScene';
 import { Color3, Vector3, Engine, Scene } from 'babylonjs';
 import { BabylonRoomOptions } from 'src/Options/BabylonRoomOptions';
-
 // import { MyScene } from 'scenes/MyScene';
 
-export class MovesRoom extends Room<MovesRoomState> {
+export class TowerDefenceRoom extends Room<MovesRoomState> {
 
   private scene: Scene;
 

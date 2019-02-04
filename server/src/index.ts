@@ -5,7 +5,7 @@ import { monitor } from '@colyseus/monitor';
 import express from 'express';
 import { MovesRoom } from './Rooms/Moves/MovesRoom';
 import { NullEngine, NullEngineOptions } from 'babylonjs';
-import { MovesRoomOptions } from './Rooms/Moves/MovesRoomOptions';
+import { BabylonRoomOptions } from './Options/BabylonRoomOptions';
 
 const port = Number(process.env.PORT || 2657);
 const app = express();
@@ -19,7 +19,7 @@ const gameServer = new Server({
   }
 });
 
-const options = new MovesRoomOptions(new NullEngine());
+const options = new BabylonRoomOptions(new NullEngine());
 gameServer.register('movesRoom', MovesRoom, options);
 
 app.use('/colyseus', monitor(gameServer));

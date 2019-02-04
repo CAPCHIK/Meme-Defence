@@ -1,6 +1,7 @@
 const path = require("path");
 const Dotenv = require("dotenv-webpack");
 
+
 module.exports = {
   target: "web",
   devtool: "inline-source-map",
@@ -32,6 +33,7 @@ module.exports = {
   ],
   devServer: {
     contentBase: path.join(__dirname, "build"),
-    port: 8088
+    port: 8088,
+    index: "index.html"
   }
 };

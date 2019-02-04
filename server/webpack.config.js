@@ -1,4 +1,5 @@
 const path = require('path');
+var WebpackShellPlugin = require('webpack-shell-plugin');
 
 module.exports = {
   entry: path.join(__dirname, 'src/index.ts'),
@@ -26,5 +27,10 @@ module.exports = {
         ]
       }
     ]
-  }
+  },
+  plugins: []
 };
+
+if (process.env.NODE_ENV !== 'production') {
+  module.exports.plugins.push(new WebpackShellPlugin({onBuildEnd: ['nodemon build/server.js --watch build']}));
+}

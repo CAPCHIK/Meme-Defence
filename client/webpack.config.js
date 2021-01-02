@@ -1,8 +1,7 @@
 const path = require("path");
 const Dotenv = require("dotenv-webpack");
 
-
-module.exports = {
+const config = {
   target: "web",
   devtool: "inline-source-map",
   entry: path.join(__dirname, "src/index.ts"),
@@ -26,14 +25,17 @@ module.exports = {
       }
     ]
   },
-  plugins: [
-    new Dotenv({
-      path: "./.env.local"
-    })
-  ],
+  plugins: [],
   devServer: {
     contentBase: path.join(__dirname, "build"),
     port: 8088,
     index: "index.html"
   }
+}
+
+module.exports = (env, argv) => {
+  config.plugins.push(new Dotenv({
+    path: `.env.${argv.mode}`
+  }));
+  return config;
 };
